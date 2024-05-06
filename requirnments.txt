@@ -1,0 +1,12 @@
+asttokens==2.4.1
+backcall==0.2.0
+certifi==2024.2.2
+numpy==1.26.4
+packaging==24.0
+panadas==0.2
+pandas==2.2.2
+python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
+requests==2.31.0
+soupsieve==2.5
+urllib3==2.2.1
