@@ -10,10 +10,10 @@ class UserDataScrapper:
         """AI is creating summary for __init__
 
         Args:
-            first_name ([Str]): First Name of the user which have been find over the instagram
-            last_name ([type]): Last Name of the user which have been find over the instagram
+            first_name ([Str]): First Name of the user which have been find over the linkdin
+            last_name ([type]): Last Name of the user which have been find over the linkdin
             id_of_linkdin ([str]): Id of the linkdin
-            _pass ([str]):pass of the lindin
+            _pass ([str]):pass of the linkdin
         """
         try:
             self.driver = webdriver.Chrome()
