@@ -27,10 +27,8 @@ class UserDataScrapper:
                 self.get_users()
                 self.returnProfileInfo()
             else:
-                pass
                 logger.debug("Login Failed")
         except:
-            # pass
             logger.error(traceback.format_exc())
         
     def login(self):
@@ -44,11 +42,9 @@ class UserDataScrapper:
             passwd.send_keys(self._pass)
             loginbutton = self.driver.find_element(by=By.XPATH, value="//*[@id=\"organic-div\"]/form/div[3]/button")
             loginbutton.click()
-            time.sleep(10)
+            time.sleep(20)
             self.login_flag = True
         except Exception as e:
-            # print(e)
-            # pass
             logger.error(traceback.format_exc())
 
     def get_users(self):
@@ -57,22 +53,16 @@ class UserDataScrapper:
             time.sleep(5)
             self.driver.get(f"https://www.linkedin.com/pub/dir/{self.first_name}/{self.last_name}")
             time.sleep(3)
-            # self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             user_data_list = self.driver.find_elements(By.XPATH, "//a[@class='app-aware-link ']")
 
             user_links = []
-
-            # Iterate through the anchor elements and extract their href attribute
             for user_data in user_data_list:
                 user_link = user_data.get_attribute("href")
                 if user_link not in user_links:
                      user_links.append(user_link)
 
-            self.user_links = user_links
+            self.user_links = set(user_links)
         except Exception as e:
-            # print(e)
-            # pass
-        
             logger.error(traceback.format_exc)
     
 
@@ -80,30 +70,23 @@ class UserDataScrapper:
         """Scrap the user profile data """
         try:
             list_of_data = []
-            user_image = ""
             self.user_links = set(self.user_links)
             for link in self.user_links:
-                    user_data = {}
-                    self.driver.get(link)
-                    # self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                    user_links_list = self.driver.find_elements(By.XPATH, "//img[@id='ember32']")
-                    for user_image_link in user_links_list:
-                        user_image = user_image_link.get_attribute("src")
-                        print(f"Image{user_image}")
-                    user_data["Profile Image"] = user_image
-                    titles = self.driver.find_elements(By.XPATH,'//div[@class="text-body-medium break-words"]')
-                    for title in titles:
-                        Title_text = title.text
-                        user_data["title"] = Title_text
-                    elements = self.driver.find_elements(By.CLASS_NAME, "display-flex ph5 pv3")
-                    user_data["Profile Link"] = link
-                    list_of_data.append(user_data)
+                user_data = {}
+                user_image = None
+                self.driver.get(link)
+                names = self.driver.find_elements(By.XPATH,'//h1[@class="text-heading-xlarge inline t-24 v-align-middle break-words"]')
+                for name in names:
+                    user_data["Name of profile"] = name.text
+                img_element = self.driver.find_elements(By.CSS_SELECTOR,"img.ember32")
+                titles = self.driver.find_elements(By.XPATH,'//div[@class="text-body-medium break-words"]')
+                for title in titles:
+                    Title_text = title.text
+                    user_data["title"] = Title_text
+                user_data["Profile Link"] = link
+                list_of_data.append(user_data)
             CSVWriter(list_of_data)
-            # list_of_data = set(list_of_data)
-            # print(list_of_data)
         except Exception as e:
-            # print(e)
-            # pass
             logger.error(traceback.format_exc())
                     
         
